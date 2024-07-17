@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -33,7 +35,7 @@ final log = Logs.create("ActivityLogger");
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   storeObject = await ObjectBox.create();
-  const Duration logSendRate = Duration(minutes: 0,seconds:15);
+  const Duration logSendRate = Duration(minutes: 0,seconds:30);
   Timer.periodic(logSendRate, (timer){handleTimer();});
   Logs.init("Learning_app",true,logBox);
   runApp(MyApp());
@@ -421,6 +423,7 @@ class _DraggableCardState extends State<DraggableCard> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    
     return GestureDetector(
       onPanDown: (details) {
         _controller.stop();
@@ -436,10 +439,17 @@ class _DraggableCardState extends State<DraggableCard> with SingleTickerProvider
      },
       onPanEnd: (details) {
         _runAnimation(details.velocity.pixelsPerSecond,size);
-        var distX = details.localPosition.dx;
-        var distY = details.localPosition.dy;
-        log.fine('Physics Object Released at distance $distX, $distY');
-        
+        double oldX = size.width/2;
+        double oldY = size.height/2;
+        double newX = details.localPosition.dx;
+        double newY = details.localPosition.dy;
+        double distX = newX-oldX;
+        double distY = newY-oldY;
+        double distTotal = sqrt(distX*distX+distY*distY);
+        log.fine(Logs.groupMessages(['Physics Object Released',
+        'Position:($newX, $newY)',
+        'Change in Position:<$distX, $distY>',
+        'Distance Travelled:$distTotal']));
       },
       child: Align(
       alignment: _dragAlignment,

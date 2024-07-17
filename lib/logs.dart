@@ -280,6 +280,23 @@ class Logs{
       body: jsonEncode(sendList));
     return;
   }
+
+  static String groupMessages(List<String> messageList){
+    String collectedMessage = "";
+    int count = 1;
+    int msglength = messageList.length;
+    if(messageList.isEmpty){
+      return "";
+    }
+    for(String message in messageList){
+      collectedMessage = '$collectedMessage$message';
+      if(count != msglength){
+        collectedMessage = '$collectedMessage|';
+      }
+      count +=1;
+    }
+    return collectedMessage;
+  }
 }
 
 class LogColors {
