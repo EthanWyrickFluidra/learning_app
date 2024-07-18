@@ -242,43 +242,57 @@ class Logs{
     }
   }
   
-  static void printSavedLogs(Box<LogBox> logBox){
-    if(logBox.count()==0){
-      print("Logs Empty");
-      return;
+  static String printSavedLogs(Box<LogBox> logBox){
+    try{
+      if(logBox.count()==0){
+        print("Logs Empty");
+        return "Logs.printSavedLogs:No Logs to Send";
+      }
+      final loglist = logBox.getAll();
+      var printList = <Map<String,dynamic>>[];
+      for(var log in loglist) {
+        printList.add(log.toJson());
+      }
+      print(jsonEncode(printList));
+    }catch(e){
+      return "Logs.printSavedLogs:ERROR;${e.toString()}";
     }
-    final loglist = logBox.getAll();
-    var printList = <Map<String,dynamic>>[];
-    for(var log in loglist) {
-      printList.add(log.toJson());
-    }
-    print(jsonEncode(printList));
-    return;
+    return "Logs.printSavedLogs:Successful Completion";
   }
 
-  static clearSavedLogs(Box<LogBox> logBox){
-    if(logBox.count()==0){
-      return;
+  static String clearSavedLogs(Box<LogBox> logBox){
+    try{
+      if(logBox.count()==0){
+        return "Logs.clearSavedLogs:No Logs to Send";
+      }
+      logBox.removeAll();
+      
+    }catch(e){
+      return "Logs.clearSavedLogs:ERROR;${e.toString()}";
     }
-    logBox.removeAll();
-    return;
+    return "Logs.clearSavedLogs:Successful Completion";
   }
 
-  static void sendSavedLogs(Box<LogBox> logBox){
-    if(logBox.count()==0){
-      return;
-    }
-    final loglist = logBox.getAll();
-    var sendList = <Map<String,dynamic>>[];
-    for(var log in loglist) {
-      sendList.add(log.toJson());
-    }
+  static String sendSavedLogs(Box<LogBox> logBox){
+    
     // TODO: implement encryption for log file sending
-    Uri endpoint = Uri.parse('https://5rwa2jvevy1no1qnvq4g.us-west-2.aoss.amazonaws.com');
-    http.post(endpoint,
-      headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8',},
-      body: jsonEncode(sendList));
-    return;
+    try{
+      if(logBox.count()==0){
+        return "Logs.sendSavedLogs:No Logs to Send";
+      }
+      final loglist = logBox.getAll();
+      var sendList = <Map<String,dynamic>>[];
+      for(var log in loglist) {
+        sendList.add(log.toJson());
+      }
+      Uri endpoint = Uri.parse('https://5rwa2jvevy1no1qnvq4g.us-west-2.aoss.amazonaws.com');
+      http.post(endpoint,
+        headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8',},
+        body: jsonEncode(sendList));
+    }catch(e){
+      return "Logs.sendSavedLogs:ERROR;${e.toString()}";
+    }
+    return "Logs.sendSavedLogs:Successful Completion";
   }
 
   static String groupMessages(List<String> messageList){

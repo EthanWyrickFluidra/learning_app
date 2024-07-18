@@ -43,7 +43,7 @@ void handleTimer(){
   if(logBox.count()!=0){
       log.info("Timed Log Send Initiated");
   }
-  Logs.printSavedLogs(logBox);
+  log.config(Logs.printSavedLogs(logBox));
   Logs.sendSavedLogs(logBox);
   Logs.clearSavedLogs(logBox);
   return;
@@ -279,7 +279,7 @@ class LogPage extends StatelessWidget {
             ElevatedButton(
                     onPressed: () {
                       // noteBox.removeAll();
-                      Logs.clearSavedLogs(logBox);
+                      log.config(Logs.clearSavedLogs(logBox));
                     },
                     child: Icon(Icons.recycling),
                   ),
@@ -288,7 +288,7 @@ class LogPage extends StatelessWidget {
                       // print("Json Array:");
                       // print(jsonEncode(loglist));
                       // print("   :Array End");
-                      Logs.printSavedLogs(logBox);
+                      log.config(Logs.printSavedLogs(logBox));
                     },
                     child: Icon(Icons.print),
                   ),
@@ -298,7 +298,7 @@ class LogPage extends StatelessWidget {
                       // http.post(endpoint,
                       // headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8',},
                       // body: jsonEncode(loglist));
-                      Logs.sendSavedLogs(logBox);
+                      log.config(Logs.sendSavedLogs(logBox));
                     },
                     child: Icon(Icons.mail),
                   ),

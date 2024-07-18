@@ -19,7 +19,7 @@ dependencies:
   path_provider: any
   objectbox: ^4.0.1
   objectbox_flutter_libs: any
-  html: any
+  http: any
 
 dev_dependencies:
   flutter_test:
