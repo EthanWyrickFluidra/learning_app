@@ -1,15 +1,9 @@
-
-
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:http/http.dart' as http;
 import '../objectbox.g.dart';
 import 'logbox.dart';
-
-
-
 
 enum LogLevel {
   finest,
@@ -28,8 +22,9 @@ class Logs{
     return Logger(loggerName);
   }
 
-  static void init(String appName,bool isDebug, Box<LogBox> logBox){
+  static String init(String appName,bool isDebug, Box<LogBox> logBox){
     bool isDebug = kDebugMode;
+    try{
     Logger.root.level = Level.ALL; // defaults to Level.INFO
     Logger.root.onRecord.listen((record) {
       if (kDebugMode) {
@@ -197,6 +192,10 @@ class Logs{
         }
       }
     });
+    }catch(e){
+      return "Logs.init:ERROR;${e.toString()}";
+    }
+    return "Logs.init:Successful Completion";
   }
 
   static void formatAndPrint({
@@ -238,8 +237,8 @@ class Logs{
       //     headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8',},
       //     body: logOutput);
      
-      return;
     }
+    return;
   }
   
   static String printSavedLogs(Box<LogBox> logBox){

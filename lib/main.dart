@@ -33,9 +33,9 @@ final log = Logs.create("ActivityLogger");
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   storeObject = await ObjectBox.create();
-  const Duration logSendRate = Duration(minutes: 3,seconds:0);
+  const Duration logSendRate = Duration(minutes: 0,seconds:30);
   Timer.periodic(logSendRate, (timer){handleTimer();});
-  Logs.init("Learning_app",true,logBox);
+  log.config(Logs.init("Learning_app",true,logBox));
   runApp(MyApp());
 }
 
@@ -122,6 +122,9 @@ class _MyHomePageState extends State<MyHomePage> {
       case 3:
         page = LogPage();
         log.info('Log Page Entered');
+      case 4:
+        page = GeneratorPage();
+        log.warning('No page for index 4, returning to page 1');
       default:
         String trace = StackTrace.current.toString();
         log.shout('Landed on undefined page');
@@ -156,6 +159,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     NavigationRailDestination(
                       icon: Icon(Icons.list),
                       label: Text('Logs'),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.warning),
+                      label: Text('Warning Button'),
                     ),
                     NavigationRailDestination(
                       icon: Icon(Icons.warning_amber),
@@ -444,6 +451,11 @@ class _DraggableCardState extends State<DraggableCard> with SingleTickerProvider
         log.fine(Logs.groupMessages(['Physics Object Released',
         'Screen Center:($oldX, $oldY)',
         'Velocity:<$vel>',
+        'Logs.groupMessages facilitates string concatenation',
+        'Which allows multiple data fields with toString() methods to be contained in messages',
+        738.toString(),
+        738.toRadixString(2),
+        'Such as the number 738 in decimal and binary',
         'Details:$detail']));
       },
       child: Align(
